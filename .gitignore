@@ -20,3 +20,6 @@ cache/
 *.mexa64
 *.pdf
 *.tar
+
+*.egg-info/
+
