@@ -240,12 +240,15 @@ class MarigoldPipeline(DiffusionPipeline):
         depth_pred = depth_pred.clip(0, 1)
 
         # Colorize
-        depth_colored = colorize_depth_maps(
-            depth_pred, 0, 1, cmap=color_map
-        ).squeeze()  # [3, H, W], value in (0, 1)
-        depth_colored = (depth_colored * 255).astype(np.uint8)
-        depth_colored_hwc = chw2hwc(depth_colored)
-        depth_colored_img = Image.fromarray(depth_colored_hwc)
+        if color_map is not None:
+            depth_colored = colorize_depth_maps(
+                depth_pred, 0, 1, cmap=color_map
+            ).squeeze()  # [3, H, W], value in (0, 1)
+            depth_colored = (depth_colored * 255).astype(np.uint8)
+            depth_colored_hwc = chw2hwc(depth_colored)
+            depth_colored_img = Image.fromarray(depth_colored_hwc)
+        else:
+            depth_colored_img = None
         return MarigoldDepthOutput(
             depth_np=depth_pred,
             depth_colored=depth_colored_img,
